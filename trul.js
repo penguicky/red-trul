@@ -111,9 +111,10 @@ const formatPermalink = (torrent) =>
   `https://redacted.ch/torrents.php?torrentid=${torrent.id}`
 
 function formatMessage(torrent, command) {
-  return `[b][code]transcode source:[/code][/b] [url=${formatPermalink(torrent)}][code]${torrent.format} / ${torrent.encoding}[/code][/url]
-[b][code]transcode command:[/code][/b] [code]${command}[/code]
-[b][code]transcode toolchain:[/code][/b] [url=https://github.com/lfence/red-trul][code]${SCRIPT_NAME}[/code][/url]`
+  return `[b][code]transcode source:[/code][/b] [url=${formatPermalink(
+    torrent
+  )}][code]${torrent.format} / ${torrent.encoding}[/code][/url]
+[b][code]transcode command:[/code][/b] [code]${command}[/code]`
 }
 
 function ensureDir(dir) {
@@ -176,7 +177,7 @@ async function makeFlacTranscode(outDir, inDir, files) {
         arg
           .replace("<in.flac>", path.join(inDir, file.path))
           .replace("<out.flac>", dst)
-          .replace("<rate>", file.sampleRate % 48000 === 0 ? 48000 : 44100),
+          .replace("<rate>", file.sampleRate % 48000 === 0 ? 48000 : 44100)
       ),
     ])
   }
@@ -264,7 +265,7 @@ async function analyzeFileList(inDir, fileList) {
       throw new Error(`[!] Required tags are not present! check ${absPath}`)
     }
     const flacStream = info.streams.find(
-      ({ codec_name }) => codec_name === "flac",
+      ({ codec_name }) => codec_name === "flac"
     )
 
     results.push({
@@ -340,7 +341,7 @@ async function main(inDir) {
   if (shouldMakeFLAC(torrent, editionGroup, analyzedFiles)) {
     const outDir = path.join(
       TRANSCODE_DIR,
-      formatDirname(group, torrent, RED_ENC_FLAC16),
+      formatDirname(group, torrent, RED_ENC_FLAC16)
     )
 
     transcodeTasks.push({
@@ -372,7 +373,7 @@ async function main(inDir) {
     const args = FLAC2MP3_ARGS.split(" ").map((arg) =>
       arg
         .replace("<args>", `'${LAME_ARGS[bitrate]}'`)
-        .replace("<nproc>", os.cpus().length),
+        .replace("<nproc>", os.cpus().length)
     )
 
     transcodeTasks.push({
@@ -397,7 +398,7 @@ async function main(inDir) {
         createdBy: SCRIPT_NAME,
         announce,
         info: { source: "RED" },
-      }),
+      })
     )
     if (skipUpload) continue
 
@@ -454,8 +455,8 @@ async function main(inDir) {
   })
   await Promise.all(
     files.map(({ fileName, postData }) =>
-      fs.writeFile(path.join(TORRENT_DIR, fileName), postData.file_input),
-    ),
+      fs.writeFile(path.join(TORRENT_DIR, fileName), postData.file_input)
+    )
   )
   console.log("[*] Done!")
 }
