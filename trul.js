@@ -22,7 +22,7 @@ let { argv } = yargs(hideBin(process.argv))
       "Torrent hash. Required unless an origin.yaml exists in flac-dir.",
   })
   .option("torrent-id", {
-    describe: "Use the given torrent id. Alternative to --info-hash.",
+    describe: "Use the given torrent ids. Alternative to --info-hash.",
   })
   .option("api-key", {
     describe: "'Torrents'-capable API token. env-definable as RED_API_KEY",
